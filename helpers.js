@@ -28,4 +28,4 @@ export async function getNewTab(browser) {
 }
 
 
-export const sleep = delay => new Promise((resolve) => setTimeout(resolve, delay))
+export const sleep = segs => new Promise(resolve => setTimeout(resolve, segs * 1000))
