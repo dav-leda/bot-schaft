@@ -1,49 +1,44 @@
-
-
-
 import puppeteer from 'puppeteer';
 import { getNewTab, sleep } from './helpers.js';
+import selectors from './selectors.js';
 
-const turnosPage = 'https://buenos-aires.diplo.de/ar-es/service/turnos/1801270?openAccordionId=item-2076388-0-panel'
-  
-const turnoElement = "#item-2076388-0-panel > div > p > a"
+const timeout = { timeout: 9999 };
 
 // Abrir Chromium
 // Para poder visualizar > headleess: false 
 const browser = await puppeteer.launch({ headless: false })
 const page = await browser.newPage()
 
-// Ir a la pagina de turnos de la embajada
-await page.goto(turnosPage)
+try {
+  // Ir a la pagina de turnos de la embajada
+  await page.goto(selectors.turnosPage)
 
-await sleep(2)
+  // Testear error
+  // await page.waitForSelector('xxx', timeout)
 
-// Cliquear en 'Reservar turno'
-await page.click(turnoElement)
+  // Cliquear en 'Reservar turno'
+  await page.waitForSelector(selectors.turnoElement, timeout)
+  await page.click(selectors.turnoElement)
 
+  // Ir al nuevo tab del browser
+  const newPage = await getNewTab(browser)  
+  await newPage.bringToFront()
 
-// Ir al nuevo tab del browser
-const newPage = await getNewTab(browser)
+  // Click en botones
+  await newPage.waitForSelector(selectors.continuarBtn, timeout)
+  await newPage.click(selectors.continuarBtn)
 
-await newPage.bringToFront()
+  await newPage.waitForSelector(selectors.continuarBtn2, timeout)
+  await newPage.click(selectors.continuarBtn2)
 
-// Esperar 1 segundo y clickear
-await sleep(1)
-const continuarButton = '#content > div.wrapper > div:nth-child(13) > a'
-await newPage.click(continuarButton)
+  await newPage.waitForSelector(selectors.continuarBtn3, timeout)
+  await newPage.click(selectors.continuarBtn3)
 
-// Esperar 1 segundo y clickear
-await sleep(1)
-const continuarButton2 = '#content > div.wrapper > div:nth-child(5) > a'
-await newPage.click(continuarButton2)
+  await newPage.waitForSelector(selectors.refreshCaptcha, timeout)
+  await newPage.click(selectors.refreshCaptcha)
 
-// Esperar 1 segundo y clickear
-await sleep(1)
-const continuarButton3 = '#content > div.wrapper > h3:nth-child(2) > a:nth-child(2)'
-await newPage.click(continuarButton3)
+} catch (error) {
+  console.log(error)
+}
 
-// Esperar 1 segundo y clickear
-await sleep(1)
-const refreshCaptcha = '#appointment_captcha_month_refreshcaptcha'
-await newPage.click(refreshCaptcha)
 
