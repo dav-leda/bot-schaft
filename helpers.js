@@ -31,7 +31,7 @@ export async function getNewTab(browser) {
 };
 
 
-export async function clickAndWait(target, selector) {
+export async function waitThenClick(target, selector) {
 
   try {
     await sleep(1)

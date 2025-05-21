@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { getNewTab, clickAndWait } from './helpers.js';
+import { getNewTab, waitThenClick } from './helpers.js';
 import selectors from './selectors.js';
 
 // Abrir Chromium
@@ -7,28 +7,24 @@ import selectors from './selectors.js';
 const browser = await puppeteer.launch({ headless: false })
 const page = await browser.newPage()
 
-try {
-  // Ir a la pagina de turnos de la embajada
-  await page.goto(selectors.turnosPage)
+// Ir a la pagina de turnos de la embajada
+await page.goto(selectors.turnosPage)
 
-  // Testear error
-  // await clickAndWait(page, 'xxx')
+// Testear error
+// await waitThenClick(page, 'xxx')
 
-  // Cliquear en 'Reservar turno'
-  await clickAndWait(page, selectors.turnoElement);
+// Cliquear en 'Reservar turno'
+await waitThenClick(page, selectors.turnoElement);
 
-  // Ir al nuevo tab del browser
-  const newPage = await getNewTab(browser)  
-  await newPage.bringToFront()
+// Ir al nuevo tab del browser
+const newPage = await getNewTab(browser)  
+await newPage.bringToFront()
 
-  // Click en botones
-  await clickAndWait(newPage, selectors.continuarBtn)
-  await clickAndWait(newPage, selectors.continuarBtn2)
-  await clickAndWait(newPage, selectors.continuarBtn3)
-  await clickAndWait(newPage, selectors.refreshCaptcha)
+// Click en botones
+await waitThenClick(newPage, selectors.continuarBtn)
+await waitThenClick(newPage, selectors.continuarBtn2)
+await waitThenClick(newPage, selectors.continuarBtn3)
+await waitThenClick(newPage, selectors.refreshCaptcha)
 
-} catch (error) {
-  console.log(error)
-}
 
 
