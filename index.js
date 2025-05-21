@@ -1,8 +1,6 @@
 import puppeteer from 'puppeteer';
-import { getNewTab, sleep } from './helpers.js';
+import { getNewTab, clickAndWait } from './helpers.js';
 import selectors from './selectors.js';
-
-const timeout = { timeout: 9999 };
 
 // Abrir Chromium
 // Para poder visualizar > headleess: false 
@@ -14,28 +12,20 @@ try {
   await page.goto(selectors.turnosPage)
 
   // Testear error
-  // await page.waitForSelector('xxx', timeout)
+  // await clickAndWait(page, 'xxx')
 
   // Cliquear en 'Reservar turno'
-  await page.waitForSelector(selectors.turnoElement, timeout)
-  await page.click(selectors.turnoElement)
+  await clickAndWait(page, selectors.turnoElement);
 
   // Ir al nuevo tab del browser
   const newPage = await getNewTab(browser)  
   await newPage.bringToFront()
 
   // Click en botones
-  await newPage.waitForSelector(selectors.continuarBtn, timeout)
-  await newPage.click(selectors.continuarBtn)
-
-  await newPage.waitForSelector(selectors.continuarBtn2, timeout)
-  await newPage.click(selectors.continuarBtn2)
-
-  await newPage.waitForSelector(selectors.continuarBtn3, timeout)
-  await newPage.click(selectors.continuarBtn3)
-
-  await newPage.waitForSelector(selectors.refreshCaptcha, timeout)
-  await newPage.click(selectors.refreshCaptcha)
+  await clickAndWait(newPage, selectors.continuarBtn)
+  await clickAndWait(newPage, selectors.continuarBtn2)
+  await clickAndWait(newPage, selectors.continuarBtn3)
+  await clickAndWait(newPage, selectors.refreshCaptcha)
 
 } catch (error) {
   console.log(error)
